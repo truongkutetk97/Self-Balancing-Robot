@@ -1,0 +1,20 @@
+>>> Warning 203 "C:\Users\truong\Desktop\MPU6050_for_PIC_Complete\ds1307.h" Line 99(1,1): Condition always TRUE
+--- Info 300 "main.c" Line 12(1,1): More info:   Timer 1 tick time is 740.56 us
+>>> Warning 203 "main.c" Line 112(1,1): Condition always TRUE
+>>> Warning 216 "main.c" Line 273(1,2): Interrupts disabled during call to prevent re-entrancy:  (@ADDFF)
+>>> Warning 202 "main.c" Line 18(5,11): Variable never used:   status
+>>> Warning 202 "main.c" Line 20(8,14): Variable never used:   prevKp
+>>> Warning 202 "main.c" Line 20(16,22): Variable never used:   prevKi
+>>> Warning 202 "main.c" Line 20(24,30): Variable never used:   prevKd
+>>> Warning 202 "main.c" Line 24(8,25): Variable never used:   movingAngleOffset
+>>> Warning 202 "main.c" Line 30(8,12): Variable never used:   dume
+>>> Warning 202 "main.c" Line 32(5,14): Variable never used:   moveState
+>>> Warning 202 "main.c" Line 33(16,19): Variable never used:   now
+>>> Warning 202 "main.c" Line 34(16,20): Variable never used:   last
+>>> Warning 202 "main.c" Line 35(16,25): Variable never used:   testtimer
+>>> Warning 202 "main.c" Line 40(11,20): Variable never used:   kalAngleX
+>>> Warning 202 "main.c" Line 101(9,10): Variable never used:   x
+>>> Warning 202 "main.c" Line 147(20,28): Variable never used:   outspeed
+      Memory usage:   ROM=75%      RAM=54% - 74%
+      0 Errors,  16 Warnings.
+Build Successful.

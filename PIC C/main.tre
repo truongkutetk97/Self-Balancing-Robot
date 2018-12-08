@@ -1,0 +1,174 @@
+ÀÄmain
+   ÃÄMAIN  3/1996  Ram=8
+   ³  ÃÄ@cinit1  (Inline)  Ram=0
+   ³  ÃÄMpu6050_Init  0/64  Ram=0
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
+   ³  ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
+   ³  ³  ³  ÀÄ@I2C_WRITE_1  0/76  Ram=1
+   ³  ³  ÃÄ@delay_ms1  0/21  Ram=1
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄMpu6050_Write  0/63  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÀÄ@delay_ms1  0/21  Ram=1
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
+   ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
+   ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
+   ³  ³  ÃÄ@I2C_READ_1  0/77  Ram=3
+   ³  ³  ÀÄ@I2C_READ_1  0/77  Ram=3
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÀÄ*
+   ³  ÃÄ@SITOF  0/39  Ram=2
+   ³  ÃÄ@SITOF  0/39  Ram=2
+   ³  ÃÄatan2  0/363  Ram=20
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ³  ÃÄ@goto11020  0/8  Ram=0
+   ³  ³  ÃÄatan  1/771  Ram=21
+   ³  ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ³  ³  ÀÄ@ADDFF  0/380  Ram=16
+   ³  ³  ÃÄatan  1/771  Ram=21
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ÃÄatan  1/771  Ram=21
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ÀÄatan  1/771  Ram=21
+   ³  ³     ÀÄ*
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ÃÄ@delay_ms2  0/23  Ram=1
+   ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ÃÄ@PSTRINGCN7_115200_62_63  0/86  Ram=5
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  1/254  Ram=13
+   ³  ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ³  ÃÄ@FTOSD  (Inline)  Ram=5
+   ³  ³  ÃÄ@DIV3232  0/81  Ram=13
+   ³  ³  ÀÄ@DIV3232  0/81  Ram=13
+   ³  ÃÄ@PSTRINGCN7_115200_62_63  0/86  Ram=5
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  1/254  Ram=13
+   ³  ³  ÀÄ*
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ÃÄ@PSTRINGCN7_115200_62_63  0/86  Ram=5
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  1/254  Ram=13
+   ³  ³  ÀÄ*
+   ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ÃÄmove  1/510  Ram=9
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@SFTOI  (Inline)  Ram=4
+   ³  ³  ÃÄ@FLT  0/65  Ram=10
+   ³  ³  ÃÄ@ITOF  1/31  Ram=2
+   ³  ³  ÀÄ@FLT  0/65  Ram=10
+   ³  ÃÄ@PSTRINGCN7_115200_62_63  0/86  Ram=5
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  1/254  Ram=13
+   ³  ³  ÀÄ*
+   ³  ÃÄ@PSTRINGCN7_115200_62_63  0/86  Ram=5
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  1/254  Ram=13
+   ³  ³  ÀÄ*
+   ³  ÃÄ@MUL1616  1/23  Ram=5
+   ³  ÃÄ@MUL1616  1/23  Ram=5
+   ³  ÃÄ@MUL1616  1/23  Ram=5
+   ³  ÃÄ@MUL1616  1/23  Ram=5
+   ³  ÃÄ@MUL1616  1/23  Ram=5
+   ³  ÃÄ@MUL1616  1/23  Ram=5
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÀÄ*
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÀÄ*
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÀÄ*
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÀÄ*
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÀÄ*
+   ³  ÃÄMpu6050_GetData  0/124  Ram=7
+   ³  ³  ÀÄ*
+   ³  ÃÄ@SITOF  0/39  Ram=2
+   ³  ÃÄ@SITOF  0/39  Ram=2
+   ³  ÃÄatan2  0/363  Ram=20
+   ³  ³  ÀÄ*
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ÃÄ@SITOF  0/39  Ram=2
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ÃÄ@SITOF  0/39  Ram=2
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ÃÄ@DIVFF  0/204  Ram=14
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ÃÄ@MULFF  0/119  Ram=13
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÀÄpid  2/498  Ram=16
+   ³     ÃÄ@ADDFF  0/380  Ram=16
+   ³     ÃÄ@ITOF  1/31  Ram=2
+   ³     ÃÄ@MULFF  0/119  Ram=13
+   ³     ÃÄ@ADDFF  0/380  Ram=16
+   ³     ÃÄ@FLT  0/65  Ram=10
+   ³     ÃÄ@FLT  0/65  Ram=10
+   ³     ÃÄ@ADDFF  0/380  Ram=16
+   ³     ÃÄ@ITOF  1/31  Ram=2
+   ³     ÃÄ@MULFF  0/119  Ram=13
+   ³     ÃÄ@ADDFF  0/380  Ram=16
+   ³     ÃÄ@ITOF  1/31  Ram=2
+   ³     ÃÄ@MULFF  0/119  Ram=13
+   ³     ÃÄ@DIVFF  0/204  Ram=14
+   ³     ÃÄ@ADDFF  0/380  Ram=16
+   ³     ÃÄ@FLT  0/65  Ram=10
+   ³     ÀÄ@FLT  0/65  Ram=10
+   ÃÄrb_isr  0/107  Ram=1
+   ³  ÃÄ@ADDFF  0/380  Ram=16
+   ³  ÀÄ@ADDFF  0/380  Ram=16
+   ÃÄtruongdeptrai  0/18  Ram=0
+   ÀÄngat_timer0  0/8  Ram=0
