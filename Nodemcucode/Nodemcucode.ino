@@ -17,17 +17,8 @@ float value[numChars];
  BlynkTimer timer;
   int pinValue;
 long mili=millis();
-BLYNK_WRITE(V5)
-{
-   pinValue = param.asInt(); // assigning incoming value from pin V1 to a variable
-  Serial.print('c');
-  // process received value
-}
-BLYNK_READ(V0)
-{
-  // This command writes Arduino's uptime in seconds to Virtual Pin (5)
-  Blynk.virtualWrite(V0, target[0]);
-}
+
+
 
 void setup()
 {  
@@ -41,53 +32,31 @@ void setup()
 }
 
 void loop()
-{  Blynk.run();//  timer.run();
-  
-  
-  if((millis()-mili)>=250)
+{  
+  Blynk.run();//  timer.run();
+  if((millis()-mili)>=250)//send get data marker to pic's uart interrupt
   {
     Serial.print('c');
     mili=millis();
   }
-  digitalWrite(LED_BUILTIN,  pinValue);
-  recvWithStartEndMarkers();
-
-  if(valuePos[0]!=0&&newData==true)
+  recvWithStartEndMarkers();//move data from uart to buffer, receivedChars
+  
+  if(valuePos[0]!=0&&newData==true)//decrypt data function 
   {
-       
     int i=0;
-    for(i;i<numPos;i++){
-      //Serial.print(numPos);Serial.print(i); //for debug
-     // Serial.println(valuePos[i]);
-        
-    }
     for(int k=0;k<numPos/2;k++)
     {
       target[k]="";
       for(int j=0;j<(valuePos[k*2+1]-valuePos[k*2]-1);j++)
-      {
-       // targetstring[j]=receivedChars[valuePos[0]+j];
-        
-        target[k]+=receivedChars[valuePos[k*2]+j];   //valuepos
+      {// targetstring[j]=receivedChars[valuePos[0]+j];
+       target[k]+=receivedChars[valuePos[k*2]+j];   //valuepos
       }  //Serial.println(target[k]);
     }
-    
     valuePos[0]=0;
-     numPos=0;
+    numPos=0;
   }
   
-  showNewData();
-  
-  
-  if(1)
-  {
-    if(receivedChars[2]=='e') digitalWrite(LED_BUILTIN,HIGH);
-    if(receivedChars[2]=='f') digitalWrite(LED_BUILTIN,LOW);
-  }
-  //for(int i=0;i++;)
-  //{
-    
- // }
+  showNewData();// send data from nodemcu to blynk
 }
 
 
