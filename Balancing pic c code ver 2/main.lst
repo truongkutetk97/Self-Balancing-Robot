@@ -1,6 +1,6 @@
-CCS PCM C Compiler, Version 5.015, 5967               14-Dec-18 16:13
+CCS PCM C Compiler, Version 5.015, 5967               14-Dec-18 23:13
 
-               Filename:   D:\Balancing\main.lst
+               Filename:   D:\ProgramFile\Github\Self-Balancing-Robot\Balancing pic c code ver 2\main.lst
 
                ROM used:   5689 words (69%)
                            Largest free fragment is 2048
@@ -5659,6 +5659,7 @@ CCS PCM C Compiler, Version 5.015, 5967               14-Dec-18 16:13
 .................... #endif 
 ....................  
 .................... //!#use ADC=8 
+.................... //modified at 11:12 12/14/2018 
 .................... #FUSES NOWDT, HS, PUT, NOPROTECT, 
 .................... #use DELAY(crystal =22118400) 
 *

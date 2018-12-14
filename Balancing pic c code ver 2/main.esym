@@ -1,7 +1,7 @@
-D G "__PCM__" 0 289 ""5.015""
-D G "__DEVICE__" 0 289 "887"
-D G "__DATE__" 0 289 ""14-Dec-18""
-D G "__TIME__" 0 289 ""16:13:40"" "Standard Header file for the PIC16F887 device ////////////////"
+D G "__PCM__" 0 0 ""5.015""
+D G "__DEVICE__" 0 0 ""
+D G "__DATE__" 0 0 ""14-Dec-18""
+D G "__TIME__" 0 0 ""23:13:09"" "Standard Header file for the PIC16F887 device ////////////////"
 c L "set_tris_a" 1 3 6 "FUNCTION"
 v L "value" 1 39 "int8" `54 
 f B "set_tris_a" 1 39 "void(int8 value)" `53 
@@ -1235,90 +1235,90 @@ C L "kalmanCalculate" 5 4 1 "FUNCTION"
 C L "kalmanCalculate" 5 4 1 "FUNCTION"
 C L "kalmanCalculate" 5 4 1 "FUNCTION"
 C L "kalmanCalculate" 5 4 1 "FUNCTION"
-D G "TICKS_PER_SECOND" 0 12 "1350.33531526549"
-V G "getdata" 0 15 "int8" `843 
-V G "status" 0 17 "int8" `844 
-V G "kp" 0 18 "int16" `845 
-V G "ki" 0 18 "int16" `846 
-V G "kd" 0 18 "int16" `847 
-V G "prevKp" 0 19 "float" `848 
-V G "prevKi" 0 19 "float" `849 
-V G "prevKd" 0 19 "float" `850 
-V G "iterm" 0 20 "float" `851 
-V G "originalSetpoint" 0 21 "float" `852 
-V G "setpoint" 0 22 "float" `853 
-V G "movingAngleOffset" 0 23 "float" `854 
-V G "inputt" 0 24 "float" `855 
-V G "output" 0 24 "float" `856 
-V G "lastinput" 0 25 "float" `857  ", lasttime;"
-V G "dir" 0 26 "int8" `858 
-V G "predir" 0 27 "int8" `859 
-V G "dume" 0 28 "float" `860 
-V G "dumemay" 0 29 "float" `861 
-V G "moveState" 0 30 "int8" `862 
-V G "now" 0 31 "int16" `863 
-V G "last" 0 32 "int16" `864 
-V G "testtimer" 0 33 "int16" `865 
-V G "accX" 0 34 "sint16" `866 
-V G "accY" 0 34 "sint16" `867 
-V G "accZ" 0 34 "sint16" `868 
-V G "gyroX" 0 35 "sint16" `869 
-V G "gyroY" 0 35 "sint16" `870 
-V G "gyroZ" 0 35 "sint16" `871 
-V G "accXangle" 0 36 "float" `872 
-V G "gyroXangle" 0 37 "float" `873 
-V G "kalAngleX" 0 38 "float" `874 
-V G "compfilterAngleX" 0 39 "float" `875 
-V G "timer" 0 40 "int16" `876 
-V G "count" 0 41 "int16" `877 
-V G "rfinput" 0 42 "int8" `878 
-V G "countt" 0 43 "float" `879 
-V G "co" 0 44 "int8" `880 
-V G "offsetGyro" 0 45 "float" `881 
-V G "c" 0 46 "int8" `882 
-V G "senddata" 0 47 "int8" `883 
-D G "RAD_TO_DEG" 0 49 "180/PI"
-D G "Slave_add" 0 50 "0x68"
-V G "ch" 0 52 "int8[12]" `884 
+D G "TICKS_PER_SECOND" 0 13 "1350.33531526549"
+V G "getdata" 0 16 "int8" `843 
+V G "status" 0 18 "int8" `844 
+V G "kp" 0 19 "int16" `845 
+V G "ki" 0 19 "int16" `846 
+V G "kd" 0 19 "int16" `847 
+V G "prevKp" 0 20 "float" `848 
+V G "prevKi" 0 20 "float" `849 
+V G "prevKd" 0 20 "float" `850 
+V G "iterm" 0 21 "float" `851 
+V G "originalSetpoint" 0 22 "float" `852 
+V G "setpoint" 0 23 "float" `853 
+V G "movingAngleOffset" 0 24 "float" `854 
+V G "inputt" 0 25 "float" `855 
+V G "output" 0 25 "float" `856 
+V G "lastinput" 0 26 "float" `857  ", lasttime;"
+V G "dir" 0 27 "int8" `858 
+V G "predir" 0 28 "int8" `859 
+V G "dume" 0 29 "float" `860 
+V G "dumemay" 0 30 "float" `861 
+V G "moveState" 0 31 "int8" `862 
+V G "now" 0 32 "int16" `863 
+V G "last" 0 33 "int16" `864 
+V G "testtimer" 0 34 "int16" `865 
+V G "accX" 0 35 "sint16" `866 
+V G "accY" 0 35 "sint16" `867 
+V G "accZ" 0 35 "sint16" `868 
+V G "gyroX" 0 36 "sint16" `869 
+V G "gyroY" 0 36 "sint16" `870 
+V G "gyroZ" 0 36 "sint16" `871 
+V G "accXangle" 0 37 "float" `872 
+V G "gyroXangle" 0 38 "float" `873 
+V G "kalAngleX" 0 39 "float" `874 
+V G "compfilterAngleX" 0 40 "float" `875 
+V G "timer" 0 41 "int16" `876 
+V G "count" 0 42 "int16" `877 
+V G "rfinput" 0 43 "int8" `878 
+V G "countt" 0 44 "float" `879 
+V G "co" 0 45 "int8" `880 
+V G "offsetGyro" 0 46 "float" `881 
+V G "c" 0 47 "int8" `882 
+V G "senddata" 0 48 "int8" `883 
+D G "RAD_TO_DEG" 0 50 "180/PI"
+D G "Slave_add" 0 51 "0x68"
+V G "ch" 0 53 "int8[12]" `884 
 C L "rb_isr" 0 7 1 "FUNCTION"
-F G "rb_isr" 0 55 "void()" `885 
-F G "truongdeptrai" 0 63 "void()" `887 
-F G "ngat_timer0" 0 69 "void()" `888 
-V L "gyroXrate" 0 78 "float" `889 
+F G "rb_isr" 0 56 "void()" `885 
+F G "truongdeptrai" 0 64 "void()" `887 
+F G "ngat_timer0" 0 70 "void()" `888 
+V L "gyroXrate" 0 79 "float" `889 
 C L "ngat_timer0" 0 7 1 "FUNCTION"
 C L "ngat_timer0" 0 7 2 "FUNCTION"
-V L "inputtt" 0 91 "float" `891 
-f G "pid" 0 91 "float(float inputtt)" `890 
-V L "speed" 0 92 "float" `893 
-V L "minabsspeed" 0 92 "int8" `894 
-f G "move" 0 92 "int8(float speed,int8 minabsspeed)" `892  "DOUBLE compfilter(double inacc, double ingyro);"
-F G "MAIN" 0 96 "void()" `895 
-V L "firststate" 0 100 "int8" `898 
+V L "inputtt" 0 92 "float" `891 
+f G "pid" 0 92 "float(float inputtt)" `890 
+V L "speed" 0 93 "float" `893 
+V L "minabsspeed" 0 93 "int8" `894 
+f G "move" 0 93 "int8(float speed,int8 minabsspeed)" `892  "DOUBLE compfilter(double inacc, double ingyro);"
+F G "MAIN" 0 97 "void()" `895 
+V L "firststate" 0 101 "int8" `898 
 C L "MAIN" 0 7 1 "FUNCTION"
 C L "MAIN" 0 7 1 "FUNCTION"
-V L "x" 0 117 "int8" `899 
-V L "index" 0 126 "int8" `900 
-V L "abc" 0 126 "float" `901 
-C L "MAIN" 0 7 1 "FUNCTION"
-C L "MAIN" 0 7 2 "FUNCTION"
+V L "x" 0 118 "int8" `899 
+V L "index" 0 127 "int8" `900 
+V L "abc" 0 127 "float" `901 
 C L "MAIN" 0 7 1 "FUNCTION"
 C L "MAIN" 0 7 2 "FUNCTION"
 C L "MAIN" 0 7 1 "FUNCTION"
-V L "outspeed" 0 169 "int8" `902 
+C L "MAIN" 0 7 2 "FUNCTION"
+C L "MAIN" 0 7 1 "FUNCTION"
+V L "outspeed" 0 170 "int8" `902 
 C L "MAIN" 0 7 11 "FUNCTION"
 C L "MAIN" 0 7 1 "FUNCTION"
 C L "MAIN" 0 7 1 "FUNCTION"
 C L "MAIN" 0 7 1 "FUNCTION"
 C L "pid" 0 7 1 "FUNCTION"
-V L "inputtt" 0 214 "float" `918 
-F G "pid" 0 215 "float(float inputtt)" `890 
-V L "error" 0 216 "float" `917 
-V L "dinput" 0 222 "float" `918 
-V L "outputt" 0 225 "float" `919 
-V L "speed" 0 232 "float" `893 
-V L "minabsspeed" 0 232 "int8" `922 
-F G "move" 0 233 "int8(float speed,int8 minabsspeed)" `892 
-V L "realspeed" 0 249 "int8" `920 
+V L "inputtt" 0 215 "float" `918 
+F G "pid" 0 216 "float(float inputtt)" `890 
+V L "error" 0 217 "float" `917 
+V L "dinput" 0 223 "float" `918 
+V L "outputt" 0 226 "float" `919 
+V L "speed" 0 233 "float" `893 
+V L "minabsspeed" 0 233 "int8" `922 
+F G "move" 0 234 "int8(float speed,int8 minabsspeed)" `892 
+V L "realspeed" 0 250 "int8" `920 
 C L "move" 0 7 1 "FUNCTION"
 C L "move" 0 7 1 "FUNCTION"
 C L "move" 0 7 1 "FUNCTION"

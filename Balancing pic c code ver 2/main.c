@@ -5,6 +5,7 @@
 #include "ds1307.h"
 #include "Kalman.h"
 //!#use ADC=8
+//modified at 11:12 12/14/2018
 #FUSES NOWDT, HS, PUT, NOPROTECT,
 #use DELAY(crystal =22118400)
 #use i2c(Master,Fast,sda=PIN_C4,scl=PIN_C3)

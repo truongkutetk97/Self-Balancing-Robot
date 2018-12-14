@@ -13,14 +13,14 @@ Stack size: 8
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  288   130  25  main.c
+  289   130  25  main.c
   768     0   0  C:\Program Files (x86)\PICC\Devices\16F887.h
   181    32   6  MPU60500.c
  2229   257  50  C:\Program Files (x86)\PICC\Drivers\math.h
   133    78  15  ds1307.h
    47    16   3  Kalman.h
 ----- -----
- 3646   513 Total
+ 3647   513 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
@@ -57,14 +57,14 @@ Page ROM  %  RAM   Vol Diff  Functions:
 Program metrics:
     Functions               10
     Statements              513
-    Comments                482
+    Comments                483
     Volume (V)              10923
     Difficulty (D)          53.8
     Effort to implement (E) 587441
     Time to implement (T)   9 hours, 4 minutes
     Est Delivered Bugs (B)  2
     Cyclomatic Complexity   29
-    Maintainability (MI)    22
+    Maintainability (MI)    21
 
  Segment     Used  Free
 -----------  ----  ----
