@@ -1,0 +1,28 @@
+>>> Warning 203 "D:\Balancing\ds1307.h" Line 99(1,1): Condition always TRUE
+--- Info 300 "main.c" Line 12(1,1): More info:   Timer 1 tick time is 740.56 us
+>>> Warning 203 "main.c" Line 127(1,1): Condition always TRUE
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (@I2C_WRITE_1)
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (@FLT)
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (@ADDFF)
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (@MULFF)
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (Mpu6050_GetData)
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (@SITOF)
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (atan2)
+>>> Warning 216 "main.c" Line 286(1,2): Interrupts disabled during call to prevent re-entrancy:  (@DIVFF)
+>>> Warning 202 "main.c" Line 17(5,11): Variable never used:   status
+>>> Warning 202 "main.c" Line 19(8,14): Variable never used:   prevKp
+>>> Warning 202 "main.c" Line 19(16,22): Variable never used:   prevKi
+>>> Warning 202 "main.c" Line 19(24,30): Variable never used:   prevKd
+>>> Warning 202 "main.c" Line 23(8,25): Variable never used:   movingAngleOffset
+>>> Warning 202 "main.c" Line 28(8,12): Variable never used:   dume
+>>> Warning 202 "main.c" Line 30(5,14): Variable never used:   moveState
+>>> Warning 202 "main.c" Line 31(16,19): Variable never used:   now
+>>> Warning 202 "main.c" Line 32(16,20): Variable never used:   last
+>>> Warning 202 "main.c" Line 33(16,25): Variable never used:   testtimer
+>>> Warning 202 "main.c" Line 38(11,20): Variable never used:   kalAngleX
+>>> Warning 202 "main.c" Line 117(9,10): Variable never used:   x
+>>> Warning 202 "main.c" Line 126(36,39): Variable never used:   abc
+>>> Warning 202 "main.c" Line 169(23,31): Variable never used:   outspeed
+      Memory usage:   ROM=69%      RAM=56% - 90%
+      0 Errors,  24 Warnings.
+Build Successful.
