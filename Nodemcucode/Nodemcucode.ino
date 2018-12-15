@@ -2,8 +2,8 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 char auth[] = "1fa6fe7a6ea5495c8ee9db797900fa18";
-char ssid[] = "linhtran_electronics";
-char pass[] = "Khongbiet113";
+char ssid[] = "Thanh nhan";
+char pass[] = "01678967113@"  ;   //"Khongbiet113";
 int t=100;
 const byte numChars = 64;
 char receivedChars[numChars];   // an array to store the received data
@@ -17,8 +17,47 @@ float value[numChars];
  BlynkTimer timer;
   int pinValue;
 long mili=millis();
-long kp,ki,kd;
-
+long kp=100,ki=100,kd=100;
+double setpoint=10,offset=10;
+int tempoo, tempo;
+BLYNK_WRITE(V10)
+{
+  kp = param.asInt(); // assigning incoming value from pin V1 to a variable
+}
+BLYNK_WRITE(V11)
+{
+  ki = param.asInt(); // assigning incoming value from pin V1 to a variable
+}
+BLYNK_WRITE(V12)
+{
+  kd = param.asInt(); // assigning incoming value from pin V1 to a variable
+}
+BLYNK_WRITE(V6)
+{
+    int temp = param.asInt(); // assigning incoming value from pin V1 to a variable
+  if(temp>tempoo) setpoint=setpoint+ 0.5;
+  else if ( temp<tempoo) setpoint=setpoint-0.5;
+  tempoo=temp;
+  //Serial.println(setpoint);
+}
+BLYNK_WRITE(V7)
+{
+  
+  int temp = param.asInt(); // assigning incoming value from pin V1 to a variable
+  if(temp>tempo) setpoint=setpoint+ 0.1;
+  else if ( temp<tempo) setpoint=setpoint-0.1;
+  tempo=temp;
+  //Serial.println(setpoint);
+}
+BLYNK_WRITE(V8)
+{
+  
+  int temp = param.asInt(); // assigning incoming value from pin V1 to a variable
+  setpoint=target[0].toFloat();
+  Serial.println(setpoint);
+  Serial.println(target[0]);
+  
+}
 
 void setup()
 {  
@@ -28,18 +67,30 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT); 
 //  int t=0;timer.setInterval(200L, myTimerEvent);
   Blynk.run();
-  
+  Blynk.virtualWrite(V10,100);Blynk.virtualWrite(V11,100);Blynk.virtualWrite(V12,100);
 }
 
 void loop()
-{  
+
+{ 
+  int i=124;
+ // Serial.println(i);Serial.print(kp);
+  
   Blynk.run();//  timer.run();
-  if((millis()-mili)>=250)//send get data marker to pic's uart interrupt
+  if((millis()-mili)>=150)//send get data marker to pic's utMart interrupt
   {
-    //Serial.print('#');
-    Serial.print('c');
-    Serial.println('c');
-    mili=millis();
+  
+    Serial.print('#');
+    Serial.print("12345");
+    
+    //Serial.print(count(kp));
+    Serial.print(kp);
+    Serial.print(ki);
+    Serial.print(kd);
+    Serial.print(long ((setpoint*100)) );
+    Serial.print("gggggxxxyyy");//pppiiiddd
+    Serial.print('@');
+      mili=millis();
   }
   recvWithStartEndMarkers();//move data from uart to buffer, receivedChars
   
@@ -59,6 +110,15 @@ void loop()
   }
   
   showNewData();// send data from nodemcu to blynk
+}
+
+int count(long kkk)
+{
+  int tempp;
+  if(kp>99)return tempp=3;
+    else if(kp>9)return tempp=2;
+    else return tempp=1;
+  
 }
 
 
@@ -107,12 +167,14 @@ void showNewData() {
        // Serial.print("This just in ... ");
        // Serial.println(receivedChars);//Serial.println(valuePos[0]);
         newData = false;
-         Blynk.virtualWrite(V0, target[0]);kp=target[0].toFloat();//ki=target[1];kd=target[2];
-         Blynk.virtualWrite(V1, target[1]);
-         Blynk.virtualWrite(V2, target[2]);
-         Blynk.virtualWrite(V3, target[3]);
-         Blynk.virtualWrite(V4, target[4]);
-         Blynk.virtualWrite(V5, target[5]);
+         Blynk.virtualWrite(V0,kp );
+         //kp=target[0].toFloat();ki=target[1].toFloat();kd=target[2].toFloat();
+         Blynk.virtualWrite(V1, ki);
+         
+         Blynk.virtualWrite(V2, kd);
+         Blynk.virtualWrite(V3, target[0]);
+         Blynk.virtualWrite(V4, target[1]);// 
+         Blynk.virtualWrite(V5, target[2]);
        
     }
 }

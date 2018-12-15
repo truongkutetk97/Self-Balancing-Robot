@@ -10,14 +10,11 @@
 #use DELAY(crystal =22118400)
 #use i2c(Master,Fast,sda=PIN_C4,scl=PIN_C3)
 #use rs232(baud=115200,parity=N,xmit=PIN_C6,rcv=PIN_C7,bits=8)
-#USE TIMER(TIMER=1,TICK=1ms,BITS=16,NOISR)
-   
+#USE TIMER(TIMER=0,TICK=1ms,BITS=8,NOISR)
+   //#priority rda, TIMER0;
 
 volatile INT getdata=0;
-
-int status=0;
 unsigned INT16 kp=25, ki=0, kd=50;
-DOUBLE prevKp, prevKi, prevKd;
 double iterm;
 DOUBLE originalSetpoint = 176.3;
 double setpoint= originalSetpoint;
@@ -26,17 +23,11 @@ double inputt, output;
 double lastinput  ;
 INT dir=1;
 INT predir=1;
-double dume;
 double dumemay=1000;
-int moveState=0;
-UNSIGNED INT16 now;
-UNSIGNED INT16 last;
-unsigned INT16 testtimer=0;
    SIGNED int16 accX, accY, accZ;
    SIGNED int16 gyroX, gyroY, gyroZ;
    DOUBLE accXangle;
    DOUBLE gyroXangle ;
-   DOUBLE kalAngleX;
    DOUBLE compfilterAngleX;
    UNSIGNED int16 timer;
    INT16 count = 0;
@@ -44,79 +35,94 @@ unsigned INT16 testtimer=0;
    DOUBLE countt = 0;
    INT co = 1;
    DOUBLE offsetGyro;
-  int RX_Command_Ready;      
-#define RX_SIZE 10          
+  INT RX_Command_Ready = 0; 
+  INT receivemarker = 0;
+   int16 testtimer=0;
+#define RX_SIZE 40         
 char RxBuffer[RX_SIZE];    
 int Index = 0;   
-   char cc;
+char smrcv;
+   CHAR cc;
       INT senddata = 0;
-      int ndxt, counter;
-      int newdata=0;
+   
 #define RAD_TO_DEG 180/PI
 #define Slave_add 0x68
 
-char ch[12]="060070080";//050070005
+
 #INT_rb 
 void rb_isr(VOID) 
 {
-   rfinput = input_change_b()&0x0F;
-   IF(rfinput>2)setpoint+=0.05;
-   else IF (rfinput==1) setpoint-=0.05;
+   rfinput = input_change_b ()&0x0F;
+   IF (rfinput > 2) setpoint += 0.05;
+   else IF (rfinput == 1) setpoint -= 0.05;
 }
 
 #INT_RDA            /*Ng?t khi nh?n d? li?u*/
 void truongdeptrai()
 {
-
-
-   char temp;    
-   temp = getc();    
-   if (temp == '#') 
-   {    
-      Index = 0; 
-      RxBuffer[Index] = temp; 
-      Index++; 
-      return; 
-   }    
-   if (temp == '\n') 
-   { 
-      RxBuffer[Index] = temp; 
-      RX_Command_Ready = TRUE; 
-      return; 
-   }    
-   RxBuffer[Index]=temp; 
-
-   if ( Index >= (RX_SIZE - 1) ) 
-      Index = 0; 
-   else 
-      Index++; 
    
- 
+   receivemarker = 1;
+   CHAR temp;
+   temp = getc ();
+
+   IF (temp == '#')
+   {
+      // ! printf ("\n % f ", (FLOAT) get_ticks ());
+      Index = 0;
+      RxBuffer[Index] = temp;
+      Index++;
+      smrcv = 1;
+      RETURN;
+   }
+
+   IF (temp == '@')
+   {
+      // ! printf ("\n % f .", (FLOAT) get_ticks ());
+      RxBuffer[Index] = temp;
+
+      IF (smrcv == 1)
+      {
+         RX_Command_Ready = 1; 
+         smrcv = 0;
+      }
+
+      RETURN;
+   }
+
+   RxBuffer[Index] = temp;
+
+   IF (Index >= (RX_SIZE - 1))
+   Index = 0;
+
+   ELSE
+   Index++;
 }
 
-#INT_TIMER0
-void ngat_timer0()
-{
-   getdata = 1;
-   accX = Mpu6050_GetData (MPU6050_RA_ACCEL_XOUT_H) ;
-   accY = Mpu6050_GetData (MPU6050_RA_ACCEL_YOUT_H) ;
-   accZ = Mpu6050_GetData (MPU6050_RA_ACCEL_ZOUT_H) ;
-   gyroX = Mpu6050_GetData (MPU6050_RA_GYRO_XOUT_H) ;
-   gyroY = Mpu6050_GetData (MPU6050_RA_GYRO_YOUT_H) ;
-   gyroZ = Mpu6050_GetData (MPU6050_RA_GYRO_ZOUT_H) ;
-   accXangle = (atan2 (accY, accZ) + PI) * RAD_TO_DEG;
-   DOUBLE gyroXrate = (double) (gyroX + offsetGyro) / 131.0;//313.4 / 303.5 /
-  
-   dumemay += gyroX;
-   count++;
-   gyroXangle += gyroXrate * 10 / 1000; // ( (DOUBLE) (get_ticks () - timer) / 1000) , 10ms
-   
-   //kalAngleX = kalmanCalculate (accXangle, gyroXrate, 10);
-   compfilterAngleX = 0.02 * accXangle + 0.98 * gyroXangle;
-   
-   inputt = compfilterAngleX;
-   set_timer0 (255 - 216) ;
-}
+//!#INT_TIMER0
+//!void ngat_timer0()
+//!{
+//!   printf ("\n %f ", (FLOAT) get_ticks ());
+//!   getdata = 1;
+//!   accX = Mpu6050_GetData (MPU6050_RA_ACCEL_XOUT_H) ;
+//!   accY = Mpu6050_GetData (MPU6050_RA_ACCEL_YOUT_H) ;
+//!   accZ = Mpu6050_GetData (MPU6050_RA_ACCEL_ZOUT_H) ;
+//!   gyroX = Mpu6050_GetData (MPU6050_RA_GYRO_XOUT_H) ;
+//!   gyroY = Mpu6050_GetData (MPU6050_RA_GYRO_YOUT_H) ;
+//!   gyroZ = Mpu6050_GetData (MPU6050_RA_GYRO_ZOUT_H) ;
+//!   accXangle = (atan2 (accY, accZ) + PI) * RAD_TO_DEG;
+//!   DOUBLE gyroXrate = (double) (gyroX + offsetGyro) / 131.0;//313.4 / 303.5 /
+//!   
+//!   dumemay += gyroX;
+//!   count++;
+//!   gyroXangle += gyroXrate * 10 / 1000; // ( (DOUBLE) (get_ticks () - timer) / 1000) , 10ms
+//!   
+//!   //kalAngleX = kalmanCalculate (accXangle, gyroXrate, 10);
+//!   compfilterAngleX = 0.02 * accXangle + 0.98 * gyroXangle;
+//!   
+//!   inputt = compfilterAngleX;
+//!   // ! printf ("\n % f .", (FLOAT) get_ticks ());
+//!   set_timer0 (255 - 216) ;
+//!}
 
 double pid(DOUBLE inputtt);
 unsigned INT move(double speed, int minabsspeed);
@@ -129,11 +135,11 @@ void main()
    Mpu6050_Init ();
    INT firststate = 1;
    set_tris_b (PIN_B5); output_low (PIN_B5);
-   port_b_pullups (TRUE) ;
+   port_b_pullups (TRUE);
    input_change_b (); // Init Change_B state
    clear_interrupt (INT_RB);
-   //!   enable_interrupts(INT_RB);
-//!   enable_interrupts (INT_TIMER0);
+   // ! enable_interrupts (INT_RB);
+   // ! enable_interrupts (INT_TIMER0);
    enable_interrupts (INT_RDA);
    enable_interrupts (GlOBAL);
    
@@ -141,8 +147,8 @@ void main()
    setup_ccp2 (CCP_PWM);
    setup_ccp1 (CCP_PWM);
    
-   setup_timer_0 (T0_INTERNAL|T0_DIV_128);
-   set_timer0 (255 - 216) ;
+//!   setup_timer_0 (T0_INTERNAL|T0_DIV_128);
+//!   set_timer0 (255 - 216) ;
    
    INT8 x;
    
@@ -153,105 +159,100 @@ void main()
    gyroXangle = accXangle;
    delay_ms (500);
    set_tris_a (0);
-   timer = 0; INT index = 0; float abc;
+   
    WHILE (1)
-   {   printf("\n 1");
-   delay_ms(100);
-  output_toggle (PIN_B5) ; 
-  if(RxBuffer[0]=='d')printf("dmvinhhhhhhh");
-      //!
-      //!      IF(rfinput>=0)
-      // !
-//!      {
-         //!      printf("\n %d ", rfinput);
-         //!      rfinput --;
+   {
+  
+      IF (RX_Command_Ready == 1) //receive data processing take 4, 44ms
+      {
+//!         disable_interrupts (GlOBAL);
+         output_toggle (PIN_B5);
+         // ! printf ("\n % f ...", (FLOAT) get_ticks ()); receivemarker = 0;
+         // ! printf ("\n %.0f", (FLOAT) kp);
+         kp = 100 * ( (UNSIGNED int16) RxBuffer[6] - 48) + 10 * ((unsigned int16) RxBuffer[7] - 48) + (unsigned int16) RxBuffer[8] - 48;
+         ki = 100 * ( (UNSIGNED int16) RxBuffer[9] - 48) + 10 * ((unsigned int16) RxBuffer[10] - 48) + (unsigned int16) RxBuffer[11] - 48;
+         kd = 100 * ( (UNSIGNED int16) RxBuffer[12] - 48) + 10 * ((unsigned int16) RxBuffer[13] - 48) + (unsigned int16) RxBuffer[14] - 48;
+         double temppo = 10000 * ( (UNSIGNED int16) RxBuffer[15] - 48) + 1000 * ((unsigned int16) RxBuffer[16] - 48) 
+         +100 * ( (UNSIGNED int16) RxBuffer[17] - 48) + 10 * ((unsigned int16) RxBuffer[18] - 48) + (unsigned int16) RxBuffer[19] - 48;
+         setpoint=temppo/100;
+         for (INT i = 0; i < RX_SIZE; i++)
+         {
+            RxBuffer[i] = '\0';
+         }
 
-         // !
-//!      }
+         RX_Command_Ready = 0;
+         // ! printf ("\n % f ", (FLOAT) get_ticks ());
+         printf (" \n < $%.2f$ $%.2f$ $%.2f$ > ", (FLOAT) inputt, (FLOAT) setpoint, (float) offsetGyro);
+//!         printf (" \n <$%f$ $%f$ $%f$ $%.2f$ $%.2f$ $%.2f$ > ", (FLOAT) kp, (float) ki, (float) kd, (FLOAT) inputt, (FLOAT) setpoint, (float) offsetGyro);
+         // ! printf ("\n % f . ", (FLOAT) get_ticks ());
+//!         enable_interrupts (GlOBAL);
+      }
 
-      
-      
-      
-      // delay_ms (5) ;
       
       IF (firststate == 1)
       {
          IF (count >= 100)
          {
             count = 0;
-            //!         printf ("\n       %f", (FLOAT)( dumemay/100));
-            //!         printf ("       %f", (FLOAT) inputt);
+            // ! printf ("\n % f", (FLOAT) (dumemay / 100)) ;
+            // ! printf (" % f", (FLOAT) inputt);
             
-            IF (co >= 13) {countt += dumemay; }
+            IF (co >= 13){countt += dumemay; }
             co++;
 
-            IF (co >= 17)
+            IF (co >= 23)
             {
-               //!         printf ("       %f", (FLOAT) countt/1000);
-               offsetGyro = - 1 * countt / 400; countt = 0; firststate = 0; count = 0;
-//!               output_high (PIN_B5) ;
+               offsetGyro = - 1 * countt / 1000; countt = 0; firststate = 0; count = 0;
             }
 
-            
             dumemay = 0;
          }
       }
 
       ELSE
       {
-         UNSIGNED int outspeed = move ( (output), 10) ;
-         if(newdata==1)
-         {
-         newdata=0;
-         for(int i = 0 ; i< 4 ; i++)
-         {
-            if(RxBuffer[i]=='c') cc='c';
-            
+//!         UNSIGNED int outspeed = move ( (output), 10) ;
          
-         }
-         IF (cc == 'c')
-         {
-            printf (" < $%f$ $%f$ $%f$ $ %.2f$ $ %.2f $ $ %.2f $  > ",(FLOAT)kp,(float)ki,(float)kd, (FLOAT) inputt, (FLOAT) originalSetpoint,(float)offsetGyro);
-            index++;
-//!            output_toggle (PIN_B5) ;
-            senddata = 0;
-            cc = '0';
-           for(int i =0 ;i<8 ; i++)RxBuffer[i]='0';
-         }
-         }
-      }
-//!output_high (PIN_B5) ;
-      kp = 100 * ( (UNSIGNED int16) ch[0] - 48) + 10 * ((unsigned int16) ch[1] - 48) + (unsigned int16) ch[2] - 48;
-      ki = 100 * ( (UNSIGNED int16) ch[3] - 48) + 10 * ((unsigned int16) ch[4] - 48) + (unsigned int16) ch[5] - 48;
-      kd = 100 * ( (UNSIGNED int16) ch[6] - 48) + 10 * ((unsigned int16) ch[7] - 48) + (unsigned int16) ch[8] - 48;
-      //setpoint = 100 * ( (UNSIGNED int16) ch[6] - 48) + 10 * ((unsigned int16) ch[7] - 48) + (unsigned int16) ch[8] - 48 + 0.1 * ( (unsigned int16) ch[9] - 48) + 0.01 * ( (unsigned int16) ch[10] - 48);
-      
-//!      output_toggle (PIN_B5) ;
-      //!     printf ("\n       %f", (FLOAT) (inputt)-0.1); //abs (inputt - setpoint)
-      
-      
-      // ! printf ("\n % ld", (INT16) output);
-//!
-//!      IF (getdata == 1)
-//!      {
-//!                         printf("       %f", (FLOAT)(get_ticks()-testtimer)*0.74);
-//!                         testtimer=get_ticks();
-//!         //abc = (get_ticks () - testtimer) * 0.74;
-//!         
-//!         getdata = 0;
-//!      }
-
-      
-      //!      IF(firststate==1)
-      // !
-      {
          //!
-         //!         firststate=0;
-
+         // !  IF (cc == 'c')
          // !
+//!         {
+            // !  // printf (" < $ % f$ $ % f$ $ % f$ $ % .2f$ $ % .2f $ $ % .2f $ > ", (FLOAT) kp, (float) ki, (float) kd, (FLOAT) inputt, (FLOAT) originalSetpoint, (float) offsetGyro);
+            // !   index++;
+            // !   output_toggle (PIN_B5) ;
+            // !   senddata = 0;
+            // !   cc = '0';
+            // !  for (INT i = 0; i < 8; i++) RxBuffer[i] = '0';
+            // !
+//!         }
       }
 
-      //!      output = pid (inputt) ;
+      IF ( (get_ticks () - testtimer) >25)
+      {
+
+         testtimer=get_ticks();
+         accX = Mpu6050_GetData (MPU6050_RA_ACCEL_XOUT_H) ;
+         accY = Mpu6050_GetData (MPU6050_RA_ACCEL_YOUT_H) ;
+         accZ = Mpu6050_GetData (MPU6050_RA_ACCEL_ZOUT_H) ;
+         gyroX = Mpu6050_GetData (MPU6050_RA_GYRO_XOUT_H) ;
+         gyroY = Mpu6050_GetData (MPU6050_RA_GYRO_YOUT_H) ;
+         gyroZ = Mpu6050_GetData (MPU6050_RA_GYRO_ZOUT_H) ;
+         accXangle = (atan2 (accY, accZ) + PI) * RAD_TO_DEG;
+         DOUBLE gyroXrate = (double) (gyroX + offsetGyro) / 131.0;//313.4 / 303.5 /
+//!         if(firststate==1)
+//!         {
+         dumemay += gyroX;
+         count++;
+         
+         gyroXangle += gyroXrate * 10 / 1000; // ( (DOUBLE) (get_ticks () - timer) / 1000) , 10ms
+         
+         //kalAngleX = kalmanCalculate (accXangle, gyroXrate, 10);
+         compfilterAngleX = 0.02 * accXangle + 0.98 * gyroXangle;
+         
+         inputt = compfilterAngleX;
+      }
+
+      // ! output = pid (inputt) ;
    }//endwhile
 }//endvoidmain
 
@@ -266,7 +267,7 @@ double pid(DOUBLE inputtt)
    DOUBLE dinput = (inputtt - lastinput) ;
    
    lastinput = inputtt;
-   DOUBLE outputt = (kp * error) + 0 - (kd*dinput) / 100;
+   DOUBLE outputt = (kp * error) + 0 - (kd * dinput) / 100;
    
    IF (outputt > 250) outputt = 250;
    else IF (outputt < - 250) outputt = - 250;
@@ -285,7 +286,7 @@ unsigned INT move(double speed, int minabsspeed)
 
    ELSE speed += 30;
    
-   IF ( (inputt >= 230)|| (inputt <= 130)|| ( (abs (inputt - setpoint) ) <= 0.5))
+   IF ( (inputt >= 230)|| (inputt <= 130)|| ( (abs (inputt - setpoint)) <= 0.5))
    {
       speed = 0; dir = 1;
    }
