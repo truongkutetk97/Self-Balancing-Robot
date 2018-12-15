@@ -17,7 +17,7 @@ float value[numChars];
  BlynkTimer timer;
   int pinValue;
 long mili=millis();
-
+long kp,ki,kd;
 
 
 void setup()
@@ -36,7 +36,9 @@ void loop()
   Blynk.run();//  timer.run();
   if((millis()-mili)>=250)//send get data marker to pic's uart interrupt
   {
+    //Serial.print('#');
     Serial.print('c');
+    Serial.println('c');
     mili=millis();
   }
   recvWithStartEndMarkers();//move data from uart to buffer, receivedChars
@@ -105,7 +107,7 @@ void showNewData() {
        // Serial.print("This just in ... ");
        // Serial.println(receivedChars);//Serial.println(valuePos[0]);
         newData = false;
-         Blynk.virtualWrite(V0, target[0]);
+         Blynk.virtualWrite(V0, target[0]);kp=target[0].toFloat();//ki=target[1];kd=target[2];
          Blynk.virtualWrite(V1, target[1]);
          Blynk.virtualWrite(V2, target[2]);
          Blynk.virtualWrite(V3, target[3]);

@@ -1,12 +1,12 @@
 ÀÄmain
-   ÃÄMAIN  2/1381  Ram=12
+   ÃÄMAIN  2/1447  Ram=12
    ³  ÃÄ@cinit1  (Inline)  Ram=0
-   ³  ÃÄMpu6050_Init  1/68  Ram=0
+   ³  ÃÄMpu6050_Init  1/64  Ram=0
    ³  ³  ÃÄMpu6050_Write  1/93  Ram=2
    ³  ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
    ³  ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
    ³  ³  ³  ÀÄ@I2C_WRITE_1  0/76  Ram=1
-   ³  ³  ÃÄ@delay_ms1  0/21  Ram=1
+   ³  ³  ÃÄ@delay_ms1  1/21  Ram=1
    ³  ³  ÃÄMpu6050_Write  1/93  Ram=2
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄMpu6050_Write  1/93  Ram=2
@@ -21,7 +21,7 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄMpu6050_Write  1/93  Ram=2
    ³  ³  ³  ÀÄ*
-   ³  ³  ÀÄ@delay_ms1  0/21  Ram=1
+   ³  ³  ÀÄ@delay_ms1  1/21  Ram=1
    ³  ÃÄMpu6050_GetData  0/132  Ram=7
    ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
    ³  ³  ÃÄ@I2C_WRITE_1  0/76  Ram=1
@@ -78,7 +78,9 @@
    ³  ÃÄ@ADDFF  0/330  Ram=16
    ³  ÃÄ@MULFF  0/121  Ram=13
    ³  ÃÄ@DIVFF  0/206  Ram=14
-   ³  ÃÄ@delay_ms2  0/23  Ram=1
+   ³  ÃÄ@delay_ms2  1/21  Ram=1
+   ³  ÃÄ@delay_ms2  1/21  Ram=1
+   ³  ÃÄ@PSTRINGC7_115200_62_63  1/84  Ram=4
    ³  ÃÄ@ADDFF  0/330  Ram=16
    ³  ÃÄ@MULFF  0/121  Ram=13
    ³  ÃÄ@DIVFF  0/206  Ram=14
@@ -98,23 +100,23 @@
    ³  ÃÄ@ITOF  1/31  Ram=2
    ³  ÃÄ@ITOF  1/31  Ram=2
    ³  ÃÄ@PSTRINGCN7_115200_62_63  1/86  Ram=5
-   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/274  Ram=13
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/266  Ram=13
    ³  ³  ÃÄ@MULFF  0/121  Ram=13
    ³  ³  ÃÄ@FTOSD  (Inline)  Ram=5
-   ³  ³  ÃÄ@DIV3232  1/81  Ram=13
-   ³  ³  ÀÄ@DIV3232  1/81  Ram=13
-   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/274  Ram=13
+   ³  ³  ÃÄ@DIV3232  2/81  Ram=13
+   ³  ³  ÀÄ@DIV3232  2/81  Ram=13
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/266  Ram=13
    ³  ³  ÀÄ*
-   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/274  Ram=13
-   ³  ³  ÀÄ*
-   ³  ÃÄ@PSTRINGCN7_115200_62_63  1/86  Ram=5
-   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/274  Ram=13
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/266  Ram=13
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGCN7_115200_62_63  1/86  Ram=5
-   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/274  Ram=13
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/266  Ram=13
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGCN7_115200_62_63  1/86  Ram=5
-   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/274  Ram=13
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/266  Ram=13
+   ³  ³  ÀÄ*
+   ³  ÃÄ@PSTRINGCN7_115200_62_63  1/86  Ram=5
+   ³  ÃÄ@PRINTF_L32D_115200_62_63FPFPF  2/266  Ram=13
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGCN7_115200_62_63  1/86  Ram=5
    ³  ÃÄ@MUL1616  1/23  Ram=5
@@ -126,8 +128,8 @@
    ÃÄrb_isr  0/97  Ram=1
    ³  ÃÄ@ADDFF  0/330  Ram=16
    ³  ÀÄ@ADDFF  0/330  Ram=16
-   ÃÄtruongdeptrai  0/10  Ram=0
-   ÀÄngat_timer0  1/608  Ram=8
+   ÃÄtruongdeptrai  0/63  Ram=3
+   ÀÄngat_timer0  1/600  Ram=8
       ÃÄMpu6050_GetData  0/132  Ram=7
       ³  ÀÄ*
       ÃÄMpu6050_GetData  0/132  Ram=7

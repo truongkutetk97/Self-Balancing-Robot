@@ -23,7 +23,7 @@ DOUBLE originalSetpoint = 176.3;
 double setpoint= originalSetpoint;
 double movingAngleOffset = 0.3;
 double inputt, output;
-double lastinput  ;//, lasttime;
+double lastinput  ;
 INT dir=1;
 INT predir=1;
 double dume;
@@ -44,9 +44,14 @@ unsigned INT16 testtimer=0;
    DOUBLE countt = 0;
    INT co = 1;
    DOUBLE offsetGyro;
-   CHAR c;
+  int RX_Command_Ready;      
+#define RX_SIZE 10          
+char RxBuffer[RX_SIZE];    
+int Index = 0;   
+   char cc;
       INT senddata = 0;
-
+      int ndxt, counter;
+      int newdata=0;
 #define RAD_TO_DEG 180/PI
 #define Slave_add 0x68
 
@@ -62,7 +67,31 @@ void rb_isr(VOID)
 #INT_RDA            /*Ng?t khi nh?n d? li?u*/
 void truongdeptrai()
 {
-   c = getch () ;
+
+
+   char temp;    
+   temp = getc();    
+   if (temp == '#') 
+   {    
+      Index = 0; 
+      RxBuffer[Index] = temp; 
+      Index++; 
+      return; 
+   }    
+   if (temp == '\n') 
+   { 
+      RxBuffer[Index] = temp; 
+      RX_Command_Ready = TRUE; 
+      return; 
+   }    
+   RxBuffer[Index]=temp; 
+
+   if ( Index >= (RX_SIZE - 1) ) 
+      Index = 0; 
+   else 
+      Index++; 
+   
+ 
 }
 
 #INT_TIMER0
@@ -104,7 +133,7 @@ void main()
    input_change_b (); // Init Change_B state
    clear_interrupt (INT_RB);
    //!   enable_interrupts(INT_RB);
-   enable_interrupts (INT_TIMER0);
+//!   enable_interrupts (INT_TIMER0);
    enable_interrupts (INT_RDA);
    enable_interrupts (GlOBAL);
    
@@ -126,16 +155,19 @@ void main()
    set_tris_a (0);
    timer = 0; INT index = 0; float abc;
    WHILE (1)
-   {
+   {   printf("\n 1");
+   delay_ms(100);
+  output_toggle (PIN_B5) ; 
+  if(RxBuffer[0]=='d')printf("dmvinhhhhhhh");
       //!
       //!      IF(rfinput>=0)
       // !
-      {
+//!      {
          //!      printf("\n %d ", rfinput);
          //!      rfinput --;
 
          // !
-      }
+//!      }
 
       
       
@@ -153,11 +185,11 @@ void main()
             IF (co >= 13) {countt += dumemay; }
             co++;
 
-            IF (co >= 23)
+            IF (co >= 17)
             {
                //!         printf ("       %f", (FLOAT) countt/1000);
-               offsetGyro = - 1 * countt / 1000; countt = 0; firststate = 0; count = 0;
-               output_high (PIN_B5) ;
+               offsetGyro = - 1 * countt / 400; countt = 0; firststate = 0; count = 0;
+//!               output_high (PIN_B5) ;
             }
 
             
@@ -168,22 +200,33 @@ void main()
       ELSE
       {
          UNSIGNED int outspeed = move ( (output), 10) ;
-         IF (c == 'c')
+         if(newdata==1)
+         {
+         newdata=0;
+         for(int i = 0 ; i< 4 ; i++)
+         {
+            if(RxBuffer[i]=='c') cc='c';
+            
+         
+         }
+         IF (cc == 'c')
          {
             printf (" < $%f$ $%f$ $%f$ $ %.2f$ $ %.2f $ $ %.2f $  > ",(FLOAT)kp,(float)ki,(float)kd, (FLOAT) inputt, (FLOAT) originalSetpoint,(float)offsetGyro);
             index++;
-            output_toggle (PIN_B5) ;
+//!            output_toggle (PIN_B5) ;
             senddata = 0;
-            c = '0';
+            cc = '0';
+           for(int i =0 ;i<8 ; i++)RxBuffer[i]='0';
+         }
          }
       }
-
+//!output_high (PIN_B5) ;
       kp = 100 * ( (UNSIGNED int16) ch[0] - 48) + 10 * ((unsigned int16) ch[1] - 48) + (unsigned int16) ch[2] - 48;
       ki = 100 * ( (UNSIGNED int16) ch[3] - 48) + 10 * ((unsigned int16) ch[4] - 48) + (unsigned int16) ch[5] - 48;
       kd = 100 * ( (UNSIGNED int16) ch[6] - 48) + 10 * ((unsigned int16) ch[7] - 48) + (unsigned int16) ch[8] - 48;
       //setpoint = 100 * ( (UNSIGNED int16) ch[6] - 48) + 10 * ((unsigned int16) ch[7] - 48) + (unsigned int16) ch[8] - 48 + 0.1 * ( (unsigned int16) ch[9] - 48) + 0.01 * ( (unsigned int16) ch[10] - 48);
       
-      
+//!      output_toggle (PIN_B5) ;
       //!     printf ("\n       %f", (FLOAT) (inputt)-0.1); //abs (inputt - setpoint)
       
       

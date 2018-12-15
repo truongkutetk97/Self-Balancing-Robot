@@ -1,35 +1,35 @@
 
-ROM used:   5689/8192 (69%)
-            5751/8192 (70%) including unused fragments
+ROM used:   5877/8192 (72%)
+            5890/8192 (72%) including unused fragments
 
             1.6 Average locations per line
-            11.1 Average locations per statement
+            10.9 Average locations per statement
 
-RAM used:   206/368 (56%) at main() level
-            331/368 (90%) worst case
+RAM used:   221/368 (60%) at main() level
+            341/368 (93%) worst case
 
 Stack used: 7 worst case (3 in main + 4 for interrupts)
 Stack size: 8
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  289   130  25  main.c
+  332   155  29  main.c
   768     0   0  C:\Program Files (x86)\PICC\Devices\16F887.h
   181    32   6  MPU60500.c
- 2229   257  50  C:\Program Files (x86)\PICC\Drivers\math.h
-  133    78  15  ds1307.h
+ 2229   257  48  C:\Program Files (x86)\PICC\Drivers\math.h
+  133    78  14  ds1307.h
    47    16   3  Kalman.h
 ----- -----
- 3647   513 Total
+ 3690   538 Total
 
 Page ROM  %  RAM   Vol Diff  Functions:
 ---- --- --- ---   --- ----  ----------
 0     83   1    3             @I2C_READ_1
 0     76   1    1             @I2C_WRITE_1
-0     21   0    1             @delay_ms1
+1     21   0    1             @delay_ms1
 1     93   2    2   113  2.0  Mpu6050_Write
 0    132   2    7   290  3.7  Mpu6050_GetData
-1     68   1    0   297  1.7  Mpu6050_Init
+1     64   1    0   297  1.7  Mpu6050_Init
 0     67   1   10             @FLT
  Inline         4             @SFTOI
 1     31   1    2             @ITOF
@@ -37,42 +37,44 @@ Page ROM  %  RAM   Vol Diff  Functions:
 0    330   6   16             @ADDFF
 0    206   4   14             @DIVFF
 0     41   1    2             @SITOF
-0    721  13   21  1082  6.9  atan
+0    721  12   21  1082  6.9  atan
 1    413   7   20  1100  9.0  atan2
 1      8   0    0             @goto11020
-0     23   0    1             @delay_ms2
+1     21   0    1             @delay_ms2
 0     97   2    1   136  4.4  rb_isr
-0     10   0    0    20  1.3  truongdeptrai
-1    608  11    8   622  5.3  ngat_timer0
-2   1381  24   12  2697 10.3  MAIN
-0     24   0    0             @const903
-1     86   2    5             @PSTRINGCN7_115200_62_63
+0     63   1    3   383  5.6  truongdeptrai
+1    600  10    8   622  5.3  ngat_timer0
+2   1447  25   12  3268 11.3  MAIN
+0      7   0    0             @const910
+1     84   1    4             @PSTRINGC7_115200_62_63
+1     24   0    0             @const914
+1     86   1    5             @PSTRINGCN7_115200_62_63
  Inline         5             @FTOSD
-1     81   1   13             @DIV3232
-2    274   5   13             @PRINTF_L32D_115200_62_63FPFPF
+2     81   1   13             @DIV3232
+2    266   5   13             @PRINTF_L32D_115200_62_63FPFPF
 1     23   0    5             @MUL1616
 1    576  10    9  1236  8.9  move
  Inline         0             @cinit1
 
 Program metrics:
     Functions               10
-    Statements              513
-    Comments                483
-    Volume (V)              10923
-    Difficulty (D)          53.8
-    Effort to implement (E) 587441
-    Time to implement (T)   9 hours, 4 minutes
-    Est Delivered Bugs (B)  2
-    Cyclomatic Complexity   29
-    Maintainability (MI)    21
+    Statements              538
+    Comments                489
+    Volume (V)              12301
+    Difficulty (D)          58.7
+    Effort to implement (E) 721933
+    Time to implement (T)   11 hours, 8 minutes
+    Est Delivered Bugs (B)  3
+    Cyclomatic Complexity   37
+    Maintainability (MI)    19
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00003     4  0  
 00004-0005E    91  0  
-0005F-007FF  1952  1  
-00800-00FFF  1987  61  
-01000-017FF  1655  393  
+0005F-007FF  1944  9  
+00800-00FFF  2044  4  
+01000-017FF  1794  254  
 01800-01FFF     0  2048  
 
 
