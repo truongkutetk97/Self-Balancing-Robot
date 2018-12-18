@@ -1,0 +1,340 @@
+
+#include <16F887.h>
+#include "MPU60500.c"
+#include "math.h"
+#include "ds1307.h"
+#include "Kalman.h"
+//!#use ADC=8
+
+//modified at 11:12 12/14/2018
+#FUSES NOWDT, HS, PUT, NOPROTECT,
+#use DELAY(crystal =22118400)
+#use i2c(Master,Fast,sda=PIN_C4,scl=PIN_C3)
+#use rs232(baud=115200,parity=N,xmit=PIN_C6,rcv=PIN_C7,bits=8)
+#USE TIMER(TIMER=0,TICK=1ms,BITS=8,NOISR)
+   //#priority rda, TIMER0;
+volatile INT getdata=0;
+unsigned INT16 kp=25, ki=0, kd=50;
+double iterm;
+DOUBLE originalSetpoint = 176.3;
+double setpoint= originalSetpoint;
+double movingAngleOffset = 0.3;
+double inputt, output;
+double lastinput  ;
+INT dir=1;
+INT predir=1;
+double dumemay=1000;
+   SIGNED int16 accX, accY, accZ;
+   SIGNED int16 gyroX, gyroY, gyroZ;
+   DOUBLE accXangle;
+   DOUBLE gyroXangle ;
+   DOUBLE compfilterAngleX;
+   UNSIGNED int16 timer;
+   INT16 count = 0;
+   INT8 rfinput = 0;
+   DOUBLE countt = 0;
+   INT co = 1;
+   DOUBLE offsetGyro;
+  INT RX_Command_Ready = 0; 
+  INT receivemarker = 0;
+   INT16 testtimer = 0;
+
+#define RX_SIZE 30         
+char RxBuffer[RX_SIZE];    
+
+int Index = 0;   
+char smrcv;
+   CHAR cc;
+      INT senddata = 0;
+   CHAR start = 'o';
+
+#define RAD_TO_DEG 180/PI
+#define Slave_add 0x68
+#INT_rb 
+
+void rb_isr(VOID) 
+{
+   rfinput = input_change_b ()&0x0F;
+   IF (rfinput > 2) setpoint += 0.05;
+   else IF (rfinput == 1) setpoint -= 0.05;
+}
+
+#INT_RDA            /*Ng?t khi nh?n d? li?u*/
+void truongdeptrai()
+{
+   
+   receivemarker = 1;
+   CHAR temp;
+   temp = getc ();
+
+   IF (temp == '#')
+   {
+      // ! printf ("\n % f ", (FLOAT) get_ticks ());
+      Index = 0;
+      RxBuffer[Index] = temp;
+      Index++;
+      smrcv = 1;
+      RETURN;
+   }
+
+   IF (temp == '@')
+   {
+      // ! printf ("\n % f .", (FLOAT) get_ticks ());
+      RxBuffer[Index] = temp;
+
+      IF (smrcv == 1)
+      {
+         RX_Command_Ready = 1;
+         smrcv = 0;
+      }
+
+      RETURN;
+   }
+
+   RxBuffer[Index] = temp;
+
+   IF (Index >= (RX_SIZE - 1))
+   Index = 0;
+
+   ELSE
+   Index++;
+}
+
+//!#INT_TIMER0
+//!VOID ngat_timer0()
+//!
+//{
+   //!   printf ("\n %f ", (FLOAT) get_ticks ());
+   //!   getdata = 1;
+   //!   accX = Mpu6050_GetData (MPU6050_RA_ACCEL_XOUT_H) ;
+   //!   accY = Mpu6050_GetData (MPU6050_RA_ACCEL_YOUT_H) ;
+   //!   accZ = Mpu6050_GetData (MPU6050_RA_ACCEL_ZOUT_H) ;
+   //!   gyroX = Mpu6050_GetData (MPU6050_RA_GYRO_XOUT_H) ;
+   //!   gyroY = Mpu6050_GetData (MPU6050_RA_GYRO_YOUT_H) ;
+   //!   gyroZ = Mpu6050_GetData (MPU6050_RA_GYRO_ZOUT_H) ;
+   //!   accXangle = (atan2 (accY, accZ) + PI) * RAD_TO_DEG;
+   //!   DOUBLE gyroXrate = (double) (gyroX + offsetGyro) / 131.0;//313.4 / 303.5 /
+   //!
+   //!   dumemay += gyroX;
+   //!   count++;
+   //!   gyroXangle += gyroXrate * 10 / 1000; // ( (DOUBLE) (get_ticks () - timer) / 1000) , 10ms
+   //!
+   //!   //kalAngleX = kalmanCalculate (accXangle, gyroXrate, 10);
+   //!   compfilterAngleX = 0.02 * accXangle + 0.98 * gyroXangle;
+
+   //!
+   //!   inputt = compfilterAngleX;
+   //!   // ! printf ("\n % f .", (FLOAT) get_ticks ());
+   //!   set_timer0 (255 - 216) ;
+
+   //!
+//!}
+
+double pid(DOUBLE inputtt);
+void move(double speed, INT minabsspeed,int m);
+//DOUBLE compfilter(double inacc, double ingyro);
+
+void main()
+{
+   
+   
+   Mpu6050_Init ();
+   INT firststate = 1;
+   set_tris_b (PIN_B5); output_low (PIN_B5);
+   port_b_pullups (TRUE);
+   input_change_b (); // Init Change_B state
+   clear_interrupt (INT_RB);
+   // ! enable_interrupts (INT_RB);
+   // ! enable_interrupts (INT_TIMER0);
+   enable_interrupts (INT_RDA);
+   enable_interrupts (GlOBAL);
+   
+   setup_timer_2 (T2_DIV_BY_1, 250, 1) ;
+   setup_ccp2 (CCP_PWM);
+   setup_ccp1 (CCP_PWM);
+   
+   //!   setup_timer_0 (T0_INTERNAL|T0_DIV_128);
+   //!   set_timer0 (255 - 216) ;
+   
+   INT8 x;
+   
+   accY = Mpu6050_GetData (MPU6050_RA_ACCEL_YOUT_H) ;
+   accZ = Mpu6050_GetData (MPU6050_RA_ACCEL_ZOUT_H) ;
+   accXangle = (atan2 (accY, accZ) + PI) * RAD_TO_DEG;
+   x_angle = accXangle;
+   gyroXangle = accXangle;
+   delay_ms (500);
+   set_tris_a (0);
+   
+   WHILE (1)
+   {
+      
+      
+      IF (firststate == 1)
+      {
+         
+         
+         output_a (0);
+         set_pwm1_duty (0); set_pwm2_duty (0) ;
+         IF (count >= 100)
+         {
+            count = 0;
+            // ! printf ("\n % f", (FLOAT) (dumemay / 100) );
+            // ! printf (" % f", (FLOAT) inputt);
+            
+            IF (co >= 13){countt += dumemay; }
+            co++;
+
+            IF (co >= 23)
+            {
+               offsetGyro = - 1 * countt / 1000; countt = 0; firststate = 0; count = 0; output_high (PIN_B5);
+            }
+
+            dumemay = 0;
+         }
+      }
+
+      ELSE
+      {
+         
+         IF (RX_Command_Ready == 1) //receive data processing take 4, 44ms
+         {
+            output_toggle (PIN_B5) ;
+            printf (" <$%.2f$$%.2f$$%.2f$> ", (FLOAT) inputt, (FLOAT) setpoint, (float) offsetGyro);
+            kp = 100 * ( (UNSIGNED int16) RxBuffer[6] - 48) + 10 * ( (unsigned int16) RxBuffer[7] - 48) + (unsigned int16) RxBuffer[8] - 48;
+            ki = 100; //* ( (UNSIGNED int16) RxBuffer[9] - 48) + 10 * ( (unsigned int16) RxBuffer[10] - 48) + (unsigned int16) RxBuffer[11] - 48;
+            kd = 100 * ( (UNSIGNED int16) RxBuffer[12] - 48) + 10 * ( (unsigned int16) RxBuffer[13] - 48) + (unsigned int16) RxBuffer[14] - 48;
+
+            float temppo = 10000 * ( (UNSIGNED int16) RxBuffer[15] - 48) + 1000 * ( (unsigned int16) RxBuffer[16] - 48)
+            + 100 * ( (UNSIGNED int16) RxBuffer[17] - 48) + 10 * ( (unsigned int16) RxBuffer[18] - 48) + (unsigned int16) RxBuffer[19] - 48;
+            setpoint = temppo / 100;
+            // setpoint = orginalsetpoint + (x - 5)  * k;
+            // IF (0) move ( (output), 10, 1) ;
+            // move (1, 0, 0) ;
+            
+            //setup_timer_2 (T2_DIV_BY_1, 250, 1) ;
+            start = RxBuffer[1];
+            
+            
+            // else IF (RxBuffer[1] == '1') {}//move (output, 10, 1) ;
+            
+            for (INT i = 0; i < RX_SIZE; i++)
+            {
+               RxBuffer[i] = '\0';
+            }
+
+            
+            RX_Command_Ready = 0;
+         }
+
+         
+         IF (start == '0')
+         {
+            output_a (0);
+            set_pwm1_duty (0); set_pwm2_duty (0) ;
+         }
+
+         ELSE move ( (output), 10, 1) ;
+      }
+
+      IF ( (get_ticks () - testtimer) > 5)
+      {
+         // testtimer = get_ticks ();
+         accX = Mpu6050_GetData (MPU6050_RA_ACCEL_XOUT_H) ;
+         accY = Mpu6050_GetData (MPU6050_RA_ACCEL_YOUT_H) ;
+         accZ = Mpu6050_GetData (MPU6050_RA_ACCEL_ZOUT_H) ;
+         gyroX = Mpu6050_GetData (MPU6050_RA_GYRO_XOUT_H) ;
+         gyroY = Mpu6050_GetData (MPU6050_RA_GYRO_YOUT_H) ;
+         gyroZ = Mpu6050_GetData (MPU6050_RA_GYRO_ZOUT_H) ;
+         accXangle = (atan2 (accY, accZ) + PI) * RAD_TO_DEG;
+         DOUBLE gyroXrate = (double) (gyroX + offsetGyro) / 131.0;//313.4 / 303.5 /
+         dumemay += gyroX;
+         count++;
+         
+         gyroXangle += gyroXrate * 3 / 1000; // ( (DOUBLE) (get_ticks () - timer) / 1000) , 10ms
+         
+         //kalAngleX = kalmanCalculate (accXangle, gyroXrate, 10);
+         compfilterAngleX = 0.02 * accXangle + 0.98 * gyroXangle;
+         
+         inputt = compfilterAngleX;
+         IF (firststate != 1) output = pid (inputt) ;
+      }
+
+      // IF (firstate != 1)
+   }//endwhile
+}//endvoidmain
+
+double pid(DOUBLE inputtt)
+{
+   DOUBLE error = (inputtt - setpoint);
+   iterm += (ki * error) ;
+   
+   IF (iterm > 250) iterm = 250;
+   else IF (iterm < 0) iterm = 0;
+   
+   DOUBLE dinput = (inputtt - lastinput) ;
+   
+   lastinput = inputtt;
+   DOUBLE outputt = (kp * error) / 10 + 0 - (kd * dinput) / 1000;
+   
+   IF (outputt > 250) outputt = 250;
+   else IF (outputt < - 250) outputt = - 250;
+   RETURN outputt;
+}
+
+void move(double speed, INT minabsspeed,int m)
+{
+   dir = 1;
+
+   IF (speed < 0)
+   {
+      dir = 2;
+      speed -= 30;
+   }
+
+   ELSE speed += 30;
+   
+   IF ( (inputt >= 230)|| (inputt <= 130)|| ( (abs (inputt - setpoint)) <= 0.5)||(m==0))
+   {
+      speed = 0; dir = 1;
+   }
+
+   UNSIGNED int realspeed = (int) abs (speed);
+   
+   IF (abs (speed) > 250) realspeed = 250;
+   else IF (abs (speed) < minabsspeed) realspeed = minabsspeed;
+   //IF (dir == 2) d = - 1 * realspeed; else if (dir == 1) d = realspeed;
+   
+   IF (! (dir == predir))
+   {
+      output_high (PIN_A1); output_high (PIN_A3); //output low duty 250 forward
+      set_pwm1_duty (250); set_pwm2_duty (250) ;
+      predir = dir;
+
+      IF (dir == 2)
+      {
+         output_high (PIN_A1);
+         output_high (PIN_A3); //output low duty 250 forward
+      } else IF (dir == 1)
+
+      {
+   output_low (PIN_A1);
+   output_low (PIN_A3); //output low duty 250 forward
+      }
+   }
+
+   IF (dir == 1) //forward angle < 180
+   {
+      set_pwm1_duty (realspeed);
+      set_pwm2_duty (realspeed);
+   }
+
+   else IF (dir == 2)
+   {
+      set_pwm1_duty (250 - realspeed) ;
+      set_pwm2_duty (250 - realspeed) ;
+   }
+
+   //RETURN realspeed;
+}
+

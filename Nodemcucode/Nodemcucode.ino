@@ -2,9 +2,10 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 char auth[] = "1fa6fe7a6ea5495c8ee9db797900fa18";
-char ssid[] = "Thanh nhan";
-char pass[] = "01678967113@"  ;   //"Khongbiet113";
+char ssid[] = "linhtran_electronics";
+char pass[] = "Khongbiet113";
 int t=100;
+ int j=1;
 const byte numChars = 64;
 char receivedChars[numChars];   // an array to store the received data
 char tempChars[numChars]; 
@@ -18,19 +19,27 @@ float value[numChars];
   int pinValue;
 long mili=millis();
 long kp=100,ki=100,kd=100;
-double setpoint=10,offset=10;
-int tempoo, tempo;
+double setpoint=180,offset=10,movepoint = 180;
+int tempoo, tempo,tempi;
+int increoffset=0, decreoffset=0, itemp=0;
+int updateoffset=0;
+float x=5,y=5;
+float k= 0.5;
+int start = 0;
 BLYNK_WRITE(V10)
 {
   kp = param.asInt(); // assigning incoming value from pin V1 to a variable
+  Blynk.virtualWrite(V0,kp );
 }
 BLYNK_WRITE(V11)
 {
   ki = param.asInt(); // assigning incoming value from pin V1 to a variable
+  Blynk.virtualWrite(V1,ki );
 }
 BLYNK_WRITE(V12)
 {
   kd = param.asInt(); // assigning incoming value from pin V1 to a variable
+  Blynk.virtualWrite(V2,kd );
 }
 BLYNK_WRITE(V6)
 {
@@ -38,7 +47,7 @@ BLYNK_WRITE(V6)
   if(temp>tempoo) setpoint=setpoint+ 0.5;
   else if ( temp<tempoo) setpoint=setpoint-0.5;
   tempoo=temp;
-  //Serial.println(setpoint);
+   movepoint= setpoint;
 }
 BLYNK_WRITE(V7)
 {
@@ -47,18 +56,43 @@ BLYNK_WRITE(V7)
   if(temp>tempo) setpoint=setpoint+ 0.1;
   else if ( temp<tempo) setpoint=setpoint-0.1;
   tempo=temp;
-  //Serial.println(setpoint);
+   movepoint= setpoint;
 }
 BLYNK_WRITE(V8)
 {
   
   int temp = param.asInt(); // assigning incoming value from pin V1 to a variable
   setpoint=target[0].toFloat();
-  Serial.println(setpoint);
+  movepoint= setpoint;
+  /*Serial.println(setpoint);
   Serial.println(target[0]);
-  
+  */
 }
+BLYNK_WRITE(V9)
+{
+  start = param.asInt(); // assigning incoming value from pin V1 to a variable
+}
+BLYNK_WRITE(V18)
+{
+  
+   updateoffset = param.asInt(); // assigning incoming value from pin V1 to a variable
 
+}
+BLYNK_WRITE(V16)
+{
+  
+   x = param[0].asInt(); 
+   y = param[1].asInt();
+   setpoint = movepoint + (y-500)/100*k;
+
+}
+BLYNK_WRITE(V20)
+{
+  
+  
+   k = (float)param.asInt()/5; // assigning incoming value from pin V1 to a variable
+   Blynk.virtualWrite(V21, k); 
+}
 void setup()
 {  
   Serial.begin(115200);
@@ -73,7 +107,8 @@ void setup()
 void loop()
 
 { 
-  int i=124;
+  //int i=124;
+  
  // Serial.println(i);Serial.print(kp);
   
   Blynk.run();//  timer.run();
@@ -81,17 +116,25 @@ void loop()
   {
   
     Serial.print('#');
-    Serial.print("12345");
+   Serial.print(start);
+    Serial.print("2345");
     
     //Serial.print(count(kp));
     Serial.print(kp);
     Serial.print(ki);
     Serial.print(kd);
     Serial.print(long ((setpoint*100)) );
-    Serial.print("gggggxxxyyy");//pppiiiddd
+    //Serial.print(incresetpoint);Serial.print(decresetpoint);
+    //Serial.print(iincresetpoint);Serial.print(ddecresetpoint);
+    
+    //Serial.print(increoffset);Serial.print(decreoffset);
+    // increoffset=0;decreoffset=0;
+    //Serial.print(long ((offset*100)) );
+    Serial.print("xy");//pppiiiddd
     Serial.print('@');
-      mili=millis();
+    mili=millis();
   }
+  
   recvWithStartEndMarkers();//move data from uart to buffer, receivedChars
   
   if(valuePos[0]!=0&&newData==true)//decrypt data function 
@@ -109,19 +152,8 @@ void loop()
     numPos=0;
   }
   
-  showNewData();// send data from nodemcu to blynk
+ showNewData();// send data from nodemcu to blynk
 }
-
-int count(long kkk)
-{
-  int tempp;
-  if(kp>99)return tempp=3;
-    else if(kp>9)return tempp=2;
-    else return tempp=1;
-  
-}
-
-
 
 
 void recvWithStartEndMarkers() {
@@ -167,14 +199,18 @@ void showNewData() {
        // Serial.print("This just in ... ");
        // Serial.println(receivedChars);//Serial.println(valuePos[0]);
         newData = false;
-         Blynk.virtualWrite(V0,kp );
+        // 
          //kp=target[0].toFloat();ki=target[1].toFloat();kd=target[2].toFloat();
-         Blynk.virtualWrite(V1, ki);
+       //  Blynk.virtualWrite(V1, ki);
          
-         Blynk.virtualWrite(V2, kd);
-         Blynk.virtualWrite(V3, target[0]);
-         Blynk.virtualWrite(V4, target[1]);// 
-         Blynk.virtualWrite(V5, target[2]);
+       // Blynk.virtualWrite(V2, kd);
+        Blynk.virtualWrite(V3, target[0]);
+        if(updateoffset==1)
+        {
+          Blynk.virtualWrite(V4, target[1]);// 
+         Blynk.virtualWrite(V5, target[2]); 
+        }
+         
        
     }
 }
