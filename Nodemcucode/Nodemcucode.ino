@@ -2,23 +2,23 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 char auth[] = "1fa6fe7a6ea5495c8ee9db797900fa18";
-char ssid[] = "linhtran_electronics";
-char pass[] = "Khongbiet113";
+char ssid[] = "TRUONG DEP TRAI";
+char pass[] = "123444444";
 int t=100;
- int j=1;
+int j=1;
 const byte numChars = 64;
 char receivedChars[numChars];   // an array to store the received data
 char tempChars[numChars]; 
 boolean newData = false;
 int valuePos[numChars];
 float value[numChars];
- int numPos=0;
- String target[10];
- char targetstring[numChars];
- BlynkTimer timer;
-  int pinValue;
+int numPos=0;
+String target[10];
+char targetstring[numChars];
+BlynkTimer timer;
+int pinValue;
 long mili=millis();
-long kp=100,ki=100,kd=100;
+long kp=250,ki=100,kd=200;
 double setpoint=180,offset=10,movepoint = 180;
 int tempoo, tempo,tempi;
 int increoffset=0, decreoffset=0, itemp=0;
@@ -51,7 +51,6 @@ BLYNK_WRITE(V6)
 }
 BLYNK_WRITE(V7)
 {
-  
   int temp = param.asInt(); // assigning incoming value from pin V1 to a variable
   if(temp>tempo) setpoint=setpoint+ 0.1;
   else if ( temp<tempo) setpoint=setpoint-0.1;
@@ -60,13 +59,9 @@ BLYNK_WRITE(V7)
 }
 BLYNK_WRITE(V8)
 {
-  
   int temp = param.asInt(); // assigning incoming value from pin V1 to a variable
   setpoint=target[0].toFloat();
   movepoint= setpoint;
-  /*Serial.println(setpoint);
-  Serial.println(target[0]);
-  */
 }
 BLYNK_WRITE(V9)
 {
@@ -74,69 +69,44 @@ BLYNK_WRITE(V9)
 }
 BLYNK_WRITE(V18)
 {
-  
    updateoffset = param.asInt(); // assigning incoming value from pin V1 to a variable
-
 }
 BLYNK_WRITE(V16)
 {
-  
-   x = param[0].asInt(); 
+  x = param[0].asInt(); 
    y = param[1].asInt();
    setpoint = movepoint + (y-500)/100*k;
-
 }
 BLYNK_WRITE(V20)
 {
-  
-  
-   k = (float)param.asInt()/5; // assigning incoming value from pin V1 to a variable
+  k = (float)param.asInt()/5; // assigning incoming value from pin V1 to a variable
    Blynk.virtualWrite(V21, k); 
 }
 void setup()
 {  
   Serial.begin(115200);
   Blynk.begin(auth, ssid, pass);
-  //inputString.reserve(200);
   pinMode(LED_BUILTIN, OUTPUT); 
-//  int t=0;timer.setInterval(200L, myTimerEvent);
   Blynk.run();
   Blynk.virtualWrite(V10,100);Blynk.virtualWrite(V11,100);Blynk.virtualWrite(V12,100);
 }
-
 void loop()
-
 { 
-  //int i=124;
-  
- // Serial.println(i);Serial.print(kp);
-  
   Blynk.run();//  timer.run();
   if((millis()-mili)>=150)//send get data marker to pic's utMart interrupt
   {
-  
     Serial.print('#');
-   Serial.print(start);
+    Serial.print(start);
     Serial.print("2345");
-    
-    //Serial.print(count(kp));
     Serial.print(kp);
     Serial.print(ki);
     Serial.print(kd);
     Serial.print(long ((setpoint*100)) );
-    //Serial.print(incresetpoint);Serial.print(decresetpoint);
-    //Serial.print(iincresetpoint);Serial.print(ddecresetpoint);
-    
-    //Serial.print(increoffset);Serial.print(decreoffset);
-    // increoffset=0;decreoffset=0;
-    //Serial.print(long ((offset*100)) );
     Serial.print("xy");//pppiiiddd
     Serial.print('@');
     mili=millis();
   }
-  
   recvWithStartEndMarkers();//move data from uart to buffer, receivedChars
-  
   if(valuePos[0]!=0&&newData==true)//decrypt data function 
   {
     int i=0;
@@ -151,26 +121,19 @@ void loop()
     valuePos[0]=0;
     numPos=0;
   }
-  
- showNewData();// send data from nodemcu to blynk
+  showNewData();// send data from nodemcu to blynk
 }
-
-
 void recvWithStartEndMarkers() {
     static boolean recvInProgress = false;
     static byte ndx = 0;
     char startMarker = '<';
     char endMarker = '>';
     char rc;
-   
     while (Serial.available() > 0 && newData == false) {
-      //Serial.println("Processing.......");
         rc = Serial.read();
-
         if (recvInProgress == true) {
             if (rc != endMarker) {
-                
-               if(rc=='$') 
+             if(rc=='$') 
                {
                 valuePos[numPos]=ndx+1;
                 numPos++;
@@ -188,7 +151,6 @@ void recvWithStartEndMarkers() {
                 newData = true;
             }
         }
-
         else if (rc == startMarker) {
             recvInProgress = true;
         }
@@ -196,21 +158,12 @@ void recvWithStartEndMarkers() {
 }
 void showNewData() {
     if (newData == true) {
-       // Serial.print("This just in ... ");
-       // Serial.println(receivedChars);//Serial.println(valuePos[0]);
         newData = false;
-        // 
-         //kp=target[0].toFloat();ki=target[1].toFloat();kd=target[2].toFloat();
-       //  Blynk.virtualWrite(V1, ki);
-         
-       // Blynk.virtualWrite(V2, kd);
         Blynk.virtualWrite(V3, target[0]);
         if(updateoffset==1)
         {
           Blynk.virtualWrite(V4, target[1]);// 
-         Blynk.virtualWrite(V5, target[2]); 
+          Blynk.virtualWrite(V5, target[2]); 
         }
-         
-       
     }
 }
